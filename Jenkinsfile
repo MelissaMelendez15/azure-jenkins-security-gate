@@ -5,7 +5,7 @@ pipeline {
     stages {
         stage('Smoke') {
             steps {
-                echo 'Pipeline OK'
+                echo 'Pipeline Polling OK'
             }
         }
     }

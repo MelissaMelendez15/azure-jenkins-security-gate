@@ -1,2 +1,1 @@
-
 # azure-jenkins-security-gate

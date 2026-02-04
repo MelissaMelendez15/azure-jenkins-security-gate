@@ -1,5 +1,14 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'python:3.10-slim'
+            args  '-u root:root' 
+        }
+    }
+
+    options {
+        skipDefaultCheckout(true)
+    }
 
     environment {
         SOURCE_DIR = 'src'
@@ -10,8 +19,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                
-                checkout scm
+               checkout scm
             }
         }
 

@@ -1,1 +1,2 @@
-# azure-jenkins-security-gate testpolling test
+# Pipeline, Jenkins, Security Gate, Bandit, Flake8
+

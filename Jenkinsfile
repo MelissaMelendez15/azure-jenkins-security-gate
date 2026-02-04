@@ -86,7 +86,7 @@ print('Bandit OK (0 issues)')
         '''
     }
 }
-    }
+}
 
     post {
             always {

@@ -69,7 +69,9 @@ pipeline {
             }
         }
 
-        post {
+    }
+
+    post {
             always {
                 // Archivar reportes aunque falle (para poder ver qué pasó)
                 archiveArtifacts artifacts: 'reports/*', fingerprint: true, onlyIfSuccessful: false
@@ -86,6 +88,5 @@ pipeline {
             cleanup {
                 cleanWs()
             }
-        }
     }
 }

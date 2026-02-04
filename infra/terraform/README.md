@@ -1,1 +1,1 @@
-# azure-jenkins-security-gate testpolling test
+# azure-jenkins-security-gate testpolling

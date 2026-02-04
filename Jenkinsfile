@@ -2,7 +2,7 @@ pipeline {
     agent {
         docker {
             image 'python:3.10-slim'
-            args  '-u root:root' 
+            args  '-u root:root'
         }
     }
 
@@ -19,7 +19,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-               checkout scm
+                checkout scm
             }
         }
 
@@ -31,10 +31,10 @@ pipeline {
                     # 1) Comprobar versión de Python (requerimos 3.9+)
                     python3 --version
                     python3 -c 'import sys; assert sys.version_info >= (3,9), "Se requiere Python 3.9 o superior"'
-                    
+
                     # 2) Crear carpetas necesarias
                     mkdir -p "$REPORTS_DIR"
-                    
+
                     # 3) Crear el entorno virtual si no existe
                     [ -d "$VENV_DIR" ] || python3 -m venv "$VENV_DIR"
 
@@ -65,18 +65,27 @@ pipeline {
         }
 
         stage('Security - Bandit') {
-            steps {
-                sh '''
-                    set -e
+    steps {
+        sh '''
+            set -e
+            mkdir -p "$REPORTS_DIR"
 
-                    # Análisis de seguridad con Bandit
-                    # -ll = solo severidad alta
-                    # Generamos reporte JSON (útil para automatizar/inspeccionar)
-                    "$VENV_DIR/bin/bandit" -r "$SOURCE_DIR" -ll | tee "$REPORTS_DIR/bandit.txt"
-                '''
-            }
-        }
+            "$VENV_DIR/bin/bandit" -r "$SOURCE_DIR" -f json -o "$REPORTS_DIR/bandit.json" || true
 
+            python -c "
+import json, sys
+data = json.load(open('reports/bandit.json'))
+issues = data.get('results', [])
+if issues:
+    print(f'Bandit encontró {len(issues)} issues')
+    for i in issues[:5]:
+        print(f\"- {i.get('test_id')} {i.get('issue_severity')} {i.get('issue_text')} ({i.get('filename')}:{i.get('line_number')})\")
+    sys.exit(1)
+print('Bandit OK (0 issues)')
+"
+        '''
+    }
+}
     }
 
     post {
@@ -89,6 +98,7 @@ pipeline {
             }
 
             failure {
+                
                 echo 'Pipeline FALLÓ: revisa reports/flake8.txt y reports/bandit.txt o bandit.json.'
             }
 

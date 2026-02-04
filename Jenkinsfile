@@ -55,11 +55,10 @@ pipeline {
             steps {
                 sh '''
                     set -e
-                    # Análisis de calidad con Flake8
-                    # Guardamos salida en un reporte para archivarlo en Jenkins
-                    "$VENV_DIR/bin/flake8" "$SOURCE_DIR" \
-                      --count --statistics --show-source \
-                      | tee "$REPORTS_DIR/flak8.txt"
+                    mkdir -p "$REPORTS_DIR"
+                    
+                    "$VENV_DIR/bin/flake8" "$SOURCE_DIR" --count --statistics --show-source > "$REPORTS_DIR/flake8.txt"
+                    cat "$REPORTS_DIR/flake8.txt"
                 '''
             }
         }
@@ -72,17 +71,28 @@ pipeline {
 
             "$VENV_DIR/bin/bandit" -r "$SOURCE_DIR" -f json -o "$REPORTS_DIR/bandit.json" || true
 
-            python -c "
-import json, sys
-data = json.load(open('reports/bandit.json'))
-issues = data.get('results', [])
+            python3 - <<'PY'
+import json
+import sys
+
+with open("reports/bandit.json", "r", encoding="utf-8") as f:
+    data = json.load(f)
+
+issues = data.get("results", [])
+
 if issues:
-    print(f'Bandit encontró {len(issues)} issues')
+    print(f"Bandit encontró {len(issues)} issues")
     for i in issues[:5]:
-        print(f\"- {i.get('test_id')} {i.get('issue_severity')} {i.get('issue_text')} ({i.get('filename')}:{i.get('line_number')})\")
+        print(
+            f"- {i.get('test_id')} "
+            f"{i.get('issue_severity')} "
+            f"{i.get('issue_text')} "
+            f"({i.get('filename')}:{i.get('line_number')})"
+        )
     sys.exit(1)
-print('Bandit OK (0 issues)')
-"
+
+print("Bandit OK (0 issues)")
+PY
         '''
     }
 }

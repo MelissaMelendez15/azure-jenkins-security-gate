@@ -146,7 +146,7 @@ Para reproducir el comportamiento:
 
 ✅ Conclusión
 
-- Este proyecto demuestra cómo implementar un security gate real en Jenkins:
+Este proyecto demuestra cómo implementar un security gate real en Jenkins:
 
 - Se bloquea código inseguro automáticamente
 

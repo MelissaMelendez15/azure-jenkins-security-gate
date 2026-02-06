@@ -85,7 +85,7 @@ return eval(user_input)
 ```
 Bandit detecta esta vulnerabilidad como B307 (use of eval) y bloquea automáticamente el pipeline.
 
-📸 Evidencias
+📸 Evidencia:
 
 ![Pipeline fallando en Bandit](docs/img/01-bandit-fail-stage.png)
 
@@ -102,7 +102,7 @@ return ast.literal_eval(user_input)
 ```
 Bandit ya no detecta vulnerabilidades y el pipeline Finaliza en verde.
 
-📸 Evidencias
+📸 Evidencia:
 
 ![Pipeline fallando en Bandit](docs/img/02-bandit-success-stage.png)
 

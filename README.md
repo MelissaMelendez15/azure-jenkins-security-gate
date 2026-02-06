@@ -10,8 +10,8 @@ Job en Jenkins: **azure-jenkins-security-gate-dos**
 ## 🎯 Qué problema resuelve
 
 En muchos equipos el código llega a `main` porque “funciona”, pero:
-- tiene problemas de calidad (estilo, malas prácticas)
-- contiene vulnerabilidades comunes (por ejemplo `eval()`)
+- Tiene problemas de calidad (estilo, malas prácticas)
+- Contiene vulnerabilidades comunes (por ejemplo `eval()`)
 
 Este proyecto demuestra cómo **detectar y bloquear automáticamente** esos riesgos usando Jenkins.
 
@@ -112,10 +112,10 @@ Bandit ya no detecta vulnerabilidades y el pipeline Finaliza en verde.
 
 El pipeline archiva automáticamente los reportes para su revisión:
 ```
-- reports/flake8.txt
+ reports/flake8.txt
 ```
 ```
-- reports/bandit.json
+ reports/bandit.json
 ```
 
 📸 Evidencia:
